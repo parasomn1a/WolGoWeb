@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>WOL</title>
+    <meta name="apple-mobile-web-app-title" content="WOL"/>
+    <link rel="apple-touch-icon" href="app.png"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="theme-color" content="#FFFFFF">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            align-items:center;
+            justify-content:center;
+            height: 100vh;
+        }
+
+        #button {
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+<img src="./button.png" id="button" onclick="wol()">
+<script>
+    function wol() {
+        const params = new URLSearchParams(window.location.search)
+        let mac = '';
+        if (params.has('mac')) {
+            mac = params.get('mac');
+        } else {
+            alert('不存在 mac 参数');
+            return
+        }
+
+        let controller = new AbortController()
+        const timeout = (timer) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const resp = new Response(
+                        JSON.stringify({
+                            error: 1,
+                            message: '连接超时'
+                        })
+                    )
+                    resolve(resp)
+                    controller.abort()
+                }, timer * 1000)
+            })
+        }
+
+        Promise.race([timeout(3), fetch('/wol?mac='+mac, {
+            signal: controller.signal
+        })])
+            .then(response => response.json())
+            .then(data => {
+                if (data.error != 0) {
+                    alert(data.message)
+                }else {
+                    alert('唤醒成功!')
+                }
+            });
+    }
+</script>
+</body>
+</html>
