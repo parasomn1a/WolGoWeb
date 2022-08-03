@@ -1,5 +1,5 @@
 BINARY="wol"
-VERSION="0.2"
+VERSION="0.2.1"
 
 build:
 	docker build -t ${BINARY}:${VERSION} -f docker/Dockerfile .
