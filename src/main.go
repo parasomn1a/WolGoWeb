@@ -53,9 +53,9 @@ func getEnvInt(name string, value int) int {
 
 func init() {
 	flag.StringVar(&ConfigSource, "c", "default", "config source default or env.")
-	flag.StringVar(&WebMode, "mode", gin.ReleaseMode, "wol.exe.exe.exe web port.")
-	flag.IntVar(&WebPort, "port", 9090, "wol.exe.exe.exe web port.")
-	flag.StringVar(&ApiKey, "key", "false", "wol.exe.exe.exe web api key.")
+	flag.StringVar(&WebMode, "mode", gin.ReleaseMode, "wol web port.")
+	flag.IntVar(&WebPort, "port", 9090, "wol port.")
+	flag.StringVar(&ApiKey, "key", "false", "wol web api key.")
 }
 
 func main() {
